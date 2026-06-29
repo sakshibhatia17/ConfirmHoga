@@ -1,0 +1,6 @@
+{
+  "name": "ConfirmHoga AI",
+  "description": "Next-generation AI PNR status prediction and split-seat Jugaad routing for Indian Railways.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
