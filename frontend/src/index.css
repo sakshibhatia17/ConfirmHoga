@@ -120,3 +120,19 @@ body {
     padding: 1rem;
   }
 }
+
+/* ──── Gauge Glow Pulse ──── */
+@keyframes gauge-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.gauge-glow-pulse {
+  animation: gauge-pulse 3s ease-in-out infinite;
+}
+
+/* ──── Smooth scrollbar for history ──── */
+.station-dropdown {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(99, 102, 241, 0.25) transparent;
+}
