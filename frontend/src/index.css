@@ -74,3 +74,49 @@ body {
 .animate-slide-up {
   animation: slideUp 12s linear infinite;
 }
+
+/* ──── Shimmer Skeleton Loading ──── */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.8s infinite ease-in-out;
+}
+
+/* ──── Station Dropdown Scrollbar ──── */
+.station-dropdown::-webkit-scrollbar {
+  width: 5px;
+}
+
+.station-dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.station-dropdown::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.25);
+  border-radius: 10px;
+}
+
+.station-dropdown::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.45);
+}
+
+/* ──── Mobile Responsiveness Fixes ──── */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2rem !important;
+  }
+
+  .glass-panel {
+    padding: 1rem;
+  }
+}

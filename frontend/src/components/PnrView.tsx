@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PnrResult } from '../types.ts';
 import { Sparkles, Train, HelpCircle, CheckCircle2, AlertTriangle, AlertCircle, RefreshCw } from 'lucide-react';
+import { PnrResultSkeleton } from './Skeleton.tsx';
 
 export default function PnrView() {
   const [pnr, setPnr] = useState('');
@@ -244,7 +245,9 @@ setResult({
         {/* Prediction Outputs panel */}
         <div className="lg:col-span-7 flex flex-col gap-6">
           <AnimatePresence mode="wait">
-            {result && (
+            {loading && <PnrResultSkeleton />}
+
+            {!loading && result && (
               <motion.div
                 key={result.pnr + result.probability}
                 initial={{ opacity: 0, scale: 0.98 }}
@@ -254,7 +257,7 @@ setResult({
                 className="flex flex-col gap-6"
               >
                 {/* Circular Gauge Card */}
-                <div className="glass-panel p-10 rounded-2xl relative overflow-hidden bg-gradient-to-br from-indigo-950/10 via-neutral-950 to-neutral-950 flex flex-col items-center justify-center text-center">
+                <div className="glass-panel p-6 sm:p-10 rounded-2xl relative overflow-hidden bg-gradient-to-br from-indigo-950/10 via-neutral-950 to-neutral-950 flex flex-col items-center justify-center text-center">
                   <div className="absolute top-0 right-0 w-48 h-48 bg-purple-500/5 rounded-full blur-[80px]"></div>
                   
                   <span className="font-mono text-xs text-neutral-400 uppercase tracking-[0.2em] mb-8">
@@ -263,7 +266,7 @@ setResult({
 
                   {/* SVG Gauge */}
                   <div className="relative flex items-center justify-center">
-                    <svg className="w-64 h-64 transform -rotate-90">
+                    <svg className="w-64 h-64 transform -rotate-90" role="img" aria-label={`Confirmation probability: ${result.probability}%`}>
                       <circle 
                         className="text-neutral-900" 
                         cx="128" 
@@ -317,7 +320,7 @@ setResult({
                 </div>
 
                 {/* AI Reasoning Strategy */}
-                <div className="glass-panel p-8 rounded-2xl relative flex flex-col gap-6">
+                <div className="glass-panel p-6 sm:p-8 rounded-2xl relative flex flex-col gap-6">
                   <div className="absolute -top-3.5 -left-3.5 bg-indigo-600 text-white w-9 h-9 rounded-full flex items-center justify-center shadow-lg border border-white/10">
                     <Sparkles className="w-4 h-4" />
                   </div>
@@ -329,14 +332,20 @@ setResult({
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                       {result.logic.map((bullet, idx) => (
-                        <div key={idx} className="p-4 rounded-lg bg-neutral-900 border border-white/5 flex flex-col gap-1.5">
+                        <motion.div
+                          key={idx}
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.4, delay: idx * 0.1 }}
+                          className="p-4 rounded-lg bg-neutral-900 border border-white/5 flex flex-col gap-1.5"
+                        >
                           <span className="font-mono text-[10px] text-indigo-400 font-bold uppercase">
                             FACTOR {idx + 1}
                           </span>
                           <p className="font-sans text-xs text-neutral-300 leading-relaxed">
                             {bullet}
                           </p>
-                        </div>
+                        </motion.div>
                       ))}
                     </div>
 
