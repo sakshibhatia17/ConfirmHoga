@@ -23,7 +23,45 @@ def read_root():
 
 @app.get("/api/find-jugaad")
 def get_jugaad(source: str, destination: str):
-    result = find_split_seat_jugaad(source.upper(), destination.upper())
+
+    return {
+        "trainName": "ConfirmHoga Express",
+        "trainNumber": "12948",
+        "totalDuration": "8h 15m",
+        "successRate": 96,
+        "segments": [
+            {
+                "id": "1",
+                "from": source.upper(),
+                "to": "BRC",
+                "trainName": "ConfirmHoga Express",
+                "trainNumber": "12948",
+                "classType": "3A",
+                "coach": "B2",
+                "seat": "12",
+                "status": "Confirmed",
+                "statusLabel": "Seat 12"
+            },
+            {
+                "id": "2",
+                "from": "BRC",
+                "to": destination.upper(),
+                "trainName": "ConfirmHoga Express",
+                "trainNumber": "12948",
+                "classType": "3A",
+                "coach": "B4",
+                "seat": "45",
+                "status": "Confirmed",
+                "statusLabel": "Seat 45"
+            }
+        ],
+        "aiStrategy": "Switch coaches at Vadodara (BRC) for maximum confirmation probability.",
+        "savings": "Avoid WL and save nearly 2 hours.",
+        "warnings": [
+            "Change coach at Vadodara.",
+            "Board second berth within 5 minutes."
+        ]
+    }
     return {
         "search_query": f"{source} to {destination}",
         "alternatives": result

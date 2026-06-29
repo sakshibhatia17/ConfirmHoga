@@ -82,8 +82,10 @@ export default function JugaadView() {
     setLoading(true);
 
     try {
-      const response = await fetch(`/api/find-jugaad?source=${source}&destination=${destination}`);
-      if (!response.ok) {
+      const response = await fetch(
+`http://127.0.0.1:8000/api/find-jugaad?source=${source}&destination=${destination}`
+) 
+     if (!response.ok) {
         const errData = await response.json();
         throw new Error(errData.error || "Failed to search Jugaad routes.");
       }
