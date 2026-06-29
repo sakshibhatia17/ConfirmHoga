@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform, animate } from 'motion/react';
 import { PnrResult } from '../types.ts';
+import { useToast } from './Toast.tsx';
+import { PnrResultSkeleton } from './Skeleton.tsx';
 import {
   Sparkles,
   Train,
@@ -419,6 +421,7 @@ export default function PnrView() {
   const [history, setHistory] = useState<PredictionHistoryEntry[]>([]);
   const [showHistory, setShowHistory] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
+  const { addToast } = useToast();
 
   // Load history on mount
   useEffect(() => {
@@ -471,7 +474,7 @@ export default function PnrView() {
 
   const handlePredict = async () => {
     if (!pnr || pnr.length !== 10 || isNaN(Number(pnr))) {
-      setError('Please enter a valid 10-digit PNR number.');
+      addToast({ type: 'error', title: 'Invalid PNR', message: 'Please enter a valid 10-digit PNR number.' });
       return;
     }
     setError(null);
@@ -508,6 +511,7 @@ export default function PnrView() {
       };
 
       setResult(predResult);
+      addToast({ type: 'success', title: 'Prediction Ready', message: `${predResult.probability}% confirmation probability calculated.` });
       addToHistory(predResult);
 
       // Scroll to result on mobile
@@ -515,7 +519,7 @@ export default function PnrView() {
         resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 200);
     } catch (e: any) {
-      setError(e.message || 'An error occurred connecting to the neural prediction server.');
+      addToast({ type: 'error', title: 'Prediction Failed', message: e.message || 'An error occurred connecting to the neural prediction server.' });
     } finally {
       setLoading(false);
     }
@@ -669,22 +673,6 @@ export default function PnrView() {
               </label>
             </div>
 
-            {/* Error messaging */}
-            <AnimatePresence>
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.25 }}
-                  className="p-3.5 rounded-lg bg-rose-500/10 border border-rose-500/25 text-rose-400 text-xs font-mono flex items-center gap-2"
-                  role="alert"
-                >
-                  <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
-                  {error}
-                </motion.div>
-              )}
-            </AnimatePresence>
 
             {/* Action button */}
             <button
@@ -823,8 +811,8 @@ export default function PnrView() {
         {/* ─── Right Column: Results ─── */}
         <div className="lg:col-span-7 flex flex-col gap-5" ref={resultRef}>
           <AnimatePresence mode="wait">
-            {/* Loading Sequence */}
-            {loading && <PredictionLoadingSequence key="loading" />}
+            {/* Loading Skeleton */}
+            {loading && <PnrResultSkeleton key="loading-skeleton" />}
 
             {/* Result Dashboard */}
             {!loading && result && (
